@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Very Important Question</title>
+<style>
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:linear-gradient(135deg,#fff7f4,#ffe8e2);
+    color:#2b2020; overflow:hidden;
+  }
+  .card{
+    width:min(92vw,520px); padding:42px 28px; text-align:center;
+    background:rgba(255,255,255,.88); border:1px solid rgba(255,255,255,.8);
+    border-radius:28px; box-shadow:0 20px 60px rgba(90,45,45,.15);
+    backdrop-filter:blur(10px); position:relative; z-index:2;
+  }
+  .emoji{font-size:48px;margin-bottom:10px}
+  h1{font-family:Georgia,serif;font-size:32px;margin:8px 0 12px}
+  p{font-size:17px;line-height:1.55;color:#695b5b}
+  .buttons{display:flex;gap:14px;justify-content:center;margin-top:28px;min-height:58px}
+  button{
+    border:0;border-radius:999px;padding:15px 28px;font-size:16px;font-weight:700;
+    cursor:pointer;transition:.2s;box-shadow:0 8px 20px rgba(80,30,30,.12)
+  }
+  #yes{background:#e85d75;color:white}
+  #no{background:#f1e9e7;color:#5d5050;position:relative}
+  .hidden{display:none}
+  .question{font-size:18px;font-weight:700;margin:24px 0 12px}
+  .choices{display:grid;gap:10px}
+  .choice{background:#fff0ed;color:#4d3535;width:100%}
+  .choice:hover{transform:translateY(-2px)}
+  .final{font-family:Georgia,serif;font-size:28px;color:#b83d57}
+  .small{font-size:13px;color:#9a8989;margin-top:22px}
+  .heart{position:fixed;bottom:-20px;animation:float 5s linear forwards;opacity:.65;z-index:1}
+  @keyframes float{to{transform:translateY(-110vh) rotate(20deg);opacity:0}}
+</style>
+</head>
+<body>
+<div class="card" id="app">
+  <div class="emoji">🍽️</div>
+  <h1>A Very Important Question</h1>
+  <p>I have a proposal that requires your immediate attention.</p>
+  <p><strong>Would you like to have dinner with me?</strong></p>
+
+  <div class="buttons">
+    <button id="yes">YES ❤️</button>
+    <button id="no">NO 🙃</button>
+  </div>
+  <div class="small">Please choose wisely. 😌</div>
+</div>
+
+<script>
+const app=document.getElementById("app");
+const no=document.getElementById("no");
+const yes=document.getElementById("yes");
+
+no.addEventListener("mouseenter",moveNo);
+no.addEventListener("touchstart",(e)=>{e.preventDefault();moveNo();});
+
+function moveNo(){
+  const pad=20;
+  const maxX=Math.max(pad,window.innerWidth-130);
+  const maxY=Math.max(pad,window.innerHeight-80);
+  no.style.position="fixed";
+  no.style.left=(Math.random()*(maxX-pad)+pad)+"px";
+  no.style.top=(Math.random()*(maxY-pad)+pad)+"px";
+}
+
+yes.addEventListener("click",()=>{
+  app.innerHTML=`
+    <div class="emoji">🥂</div>
+    <h1>Excellent choice.</h1>
+    <p>Now, since you've agreed to dinner, I have a few very important questions.</p>
+    <div class="question">What kind of dinner are you feeling?</div>
+    <div class="choices">
+      <button class="choice" onclick="next(1)">🍝 Something Italian</button>
+      <button class="choice" onclick="next(1)">🍜 Something Asian</button>
+      <button class="choice" onclick="next(1)">✨ You choose</button>
+    </div>`;
+});
+
+function next(step){
+  if(step===1){
+    app.innerHTML=`
+      <div class="emoji">📅</div>
+      <h1>One last decision...</h1>
+      <p>When should we make this happen?</p>
+      <div class="choices">
+        <button class="choice" onclick="finish()">Friday evening</button>
+        <button class="choice" onclick="finish()">Saturday evening</button>
+        <button class="choice" onclick="finish()">Whenever you're free 😌</button>
+      </div>`;
+  }
+}
+function finish(){
+  app.innerHTML=`
+    <div class="emoji">❤️</div>
+    <div class="final">It's a dinner date!</div>
+    <p>I'll take care of the details.</p>
+    <p><strong>Just show up. 😉</strong></p>
+    <div class="small">Screenshot this if you need proof that you said yes.</div>`;
+  for(let i=0;i<18;i++) setTimeout(spawnHeart,i*120);
+}
+function spawnHeart(){
+  const h=document.createElement("div");
+  h.className="heart"; h.textContent=["❤️","💕","✨"][Math.floor(Math.random()*3)];
+  h.style.left=Math.random()*100+"vw"; h.style.fontSize=(18+Math.random()*18)+"px";
+  document.body.appendChild(h); setTimeout(()=>h.remove(),5000);
+}
+</script>
+</body>
+</html>
